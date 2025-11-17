@@ -17,6 +17,8 @@ find_package(OpenCV REQUIRED)
 # Source Files
 set(PROJECT_SOURCES
     src/main.cpp
+    src/backend/LiveImageProvider.cpp
+    src/backend/LiveImageProvider.h
 )
 
 # Executable
