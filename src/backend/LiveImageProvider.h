@@ -12,11 +12,11 @@ public:
     LiveImageProvider();
     
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
-    void updateFrame(const QString &id, const cv::Mat &frame);
 
 private:
     QImage matToQImage(const cv::Mat &mat);
-    QMap<QString, QImage> m_frames;
+    
+    cv::Mat prevFrame; // To store the last frame for comparison
     QMutex m_mutex;
 };
 
