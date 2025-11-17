@@ -21,7 +21,6 @@ Window {
             font.bold: true
         }
 
-        // The Surveillance Grid
         GridLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -30,33 +29,37 @@ Window {
             columnSpacing: 5
             rowSpacing: 5
 
-            // Camera 1 Tile
+            // --- CAM 1 TILE ---
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: "black"
                 border.color: "#00ff00"
                 border.width: 1
+                clip: true  // <-- THIS IS THE FIX (was "clips")
 
                 Image {
                     id: cam1
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
-                    // This URL triggers our C++ LiveImageProvider
-                    // "image://" = protocol
-                    // "live" = the name we registered in main.cpp
-                    // "cam1" = the ID passed to requestImage()
+                    cache: false
                     source: "image://live/cam1"
-                    
-                    // Disable caching so we get new frames (crucial for video!)
-                    cache: false 
+                }
+                
+                Timer {
+                    interval: 30 // ~30 FPS
+                    running: true
+                    repeat: true
+                    onTriggered: {
+                        cam1.source = "image://live/cam1?t=" + Date.now()
+                    }
                 }
 
                 Text {
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.margins: 5
-                    text: "CAM 01 [ONLINE]"
+                    text: "CAM 01 [LIVE]"
                     color: "white"
                     font.bold: true
                     style: Text.Outline
@@ -64,18 +67,13 @@ Window {
                 }
             }
 
-            // Placeholder for Cam 2 (Empty for now)
+            // Placeholder for Cam 2
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: "#101010"
                 border.color: "#333"
-                
-                Text {
-                    anchors.centerIn: parent
-                    text: "NO SIGNAL"
-                    color: "#555"
-                }
+                Text { anchors.centerIn: parent; text: "NO SIGNAL"; color: "#555" }
             }
         }
     }
